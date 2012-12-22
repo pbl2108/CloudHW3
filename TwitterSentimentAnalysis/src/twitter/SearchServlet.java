@@ -5,8 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.*;
+
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
@@ -17,7 +23,7 @@ public class SearchServlet extends HttpServlet {
     }
     
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
-    throws IOException {
+    		throws IOException {
     	
     	String query = req.getParameter("keywords");
     	query = query.replace(" ","%20");
@@ -39,6 +45,61 @@ public class SearchServlet extends HttpServlet {
     	resp.getWriter().print("<p>");
     	resp.getWriter().println(json);
     	resp.getWriter().print("</p>");
+    	
+    	ArrayList<TwitterBean> listOfTweets = null;
+    	try {
+    		listOfTweets = this.parseJSON(json);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	
+    	if (listOfTweets == null)
+    		return;
+    	
+    	PersistenceManager pm = PMF.get().getPersistenceManager();
+    	
+    	try {
+             pm.makePersistent(listOfTweets);
+         } finally {
+             pm.close();
+         }
+    	 
     	//resp.sendRedirect("/search.jsp");
+    }
+    
+    /**
+     * Parses a JSON string into collection of TwitterBean objects.
+     * 
+     * @param json	the JSON string to parse
+     * @return	collection of TwitterBean objects
+     * @throws JSONException	if the parsing is not successful
+     */
+    public ArrayList<TwitterBean> parseJSON(String json) 
+    		throws JSONException {
+    	
+    	JSONObject myjson = new JSONObject(json);
+    	JSONArray the_json_array = myjson.getJSONArray("results");
+
+    	int size = the_json_array.length();
+    	//ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
+    	ArrayList<TwitterBean> listOfTweets = new ArrayList<TwitterBean>();
+
+    	for (int i = 0; i < size; i++)
+    	{
+    		JSONObject another_json_object = the_json_array.getJSONObject(i);
+
+    		String tweet_id = another_json_object.get("id_str").toString();
+    		String text = another_json_object.get("text").toString();
+    		String from_user = another_json_object.get("from_user").toString();
+    		String from_user_name = another_json_object.get("from_user_name").toString();
+    		String created_at = another_json_object.get("created_at").toString();
+    		String profile_image_url = another_json_object.get("profile_image_url").toString();
+
+    		TwitterBean tb = new TwitterBean(tweet_id, text, from_user, from_user_name, profile_image_url, created_at);
+    		listOfTweets.add(tb);
+    	}
+    	
+    	return listOfTweets;
+    	
     }
 }	

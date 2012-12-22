@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+	<title>TEST page</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	<style type="text/css">
+		.ourKeyWord
+		{
+			font-size: 30px;
+			color: Red !important;
+		}
+		
+		.toolTipClass
+		{
+			width: 522px;
+			min-height: 100px;
+			max-height: 300px;
+			overflow: hidden;
+			border: 1px solid #e8e8e8;
+			border-radius: 5px;
+			color: #333333;
+			font-size: 14px;
+			font-family: Arial,sans-serif;
+			line-height: 18px;
+			background-color: #fff;
+			box-shadow: 0 0 8px 8px #d8d8d8;
+		}
+		.tweetContainer
+		{
+			position: relative;
+			padding: 12px;
+			border-bottom: 1px solid #e8e8e8;
+			cursor: pointer;
+		}
+		.tweetContainer:hover
+		{
+			background-color: #f5f5f5;
+		}
+		.twitterContent
+		{
+			margin-left: 58px;
+		}
+		.toolTipClass h2, .toolTipClass p
+		{
+			margin: 0;
+		}
+		.userAnchor
+		{
+			color: #999999;
+			text-decoration: none;
+		}
+		.userAnchor strong
+		{
+			color: #333333;
+		}
+		.userAnchor:hover strong
+		{
+			color: #0084b4;
+			text-decoration: underline;
+		}
+		.userSpan
+		{
+			font-size: 12px;
+		}
+		.userSpan s
+		{
+			text-decoration: none;
+		}
+		.userSpan b
+		{
+			font-weight: normal;
+		}
+		.avatarClass
+		{
+			position: absolute;
+			left: 12px;
+			top: 12px;
+			border-radius: 5px;
+			height: 48px;
+			width: 48px;
+		}
+	</style>
+</head>
+<body>
+	<div class="toolTipClass">
+		<div class="tweetContainer">
+			<h2>
+				Tweets</h2>
+		</div>
+		<div class="tweetContainer">
+			<div class="twitterContent">
+				<div class="tweetHeader">
+					<a href="http://www.twitter.com/patkelsey" target="_blank" class="userAnchor"><strong>
+						data["from_user_name"] Thom at Yahoo</strong> <span class="userSpan"><s>@</s> <b>data["from_user"]</b>
+						</span>
+						<img class="avatarClass" src="http://a0.twimg.com/profile_images/1510199369/unser_Multiuniversum_normal.jpg"
+							alt="rrr" />
+					</a>
+				</div>
+				<p>
+					@patkelsey I just wanted to thank you for your comments on @TheLastWord United States
+					needs more REAL MEN to stand up & be counted! That U R
+				</p>
+			</div>
+		</div>
+		<div class="tweetContainer">
+			<div class="twitterContent">
+				<div class="tweetHeader">
+					<a href="http://www.twitter.com/patkelsey" target="_blank" class="userAnchor"><strong>
+						data["from_user_name"] Thom at Yahoo</strong> <span class="userSpan"><s>@</s> <b>data["from_user"]</b>
+						</span>
+						<img class="avatarClass" src="http://a0.twimg.com/profile_images/1510199369/unser_Multiuniversum_normal.jpg"
+							alt="rrr" />
+					</a>
+				</div>
+				<p>
+					@patkelsey I just wanted to thank you for your comments on @TheLastWord United States
+					needs more REAL MEN to stand up & be counted! That U R
+				</p>
+			</div>
+		</div>
+		<div class="tweetContainer">
+			<div class="twitterContent">
+				<div class="tweetHeader">
+					<a href="http://www.twitter.com/patkelsey" target="_blank" class="userAnchor"><strong>
+						data["from_user_name"] Thom at Yahoo</strong> <span class="userSpan"><s>@</s> <b>data["from_user"]</b>
+						</span>
+						<img class="avatarClass" src="http://a0.twimg.com/profile_images/1510199369/unser_Multiuniversum_normal.jpg"
+							alt="rrr" />
+					</a>
+				</div>
+				<p>
+					@patkelsey I just wanted to thank you for your comments on @TheLastWord United States
+					needs more REAL MEN to stand up & be counted! That U R
+				</p>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<a href="javascript:void(0);" class="ourKeyWord" title="11">Our Keyword</a>
+	<script type="text/javascript">
+		//<![CDATA[
+		//		$(function () {
+		//			$(".ourKeyWord").tooltip({
+		//				disabled: true,
+		//				content: function () { return parseHTML(); }
+		//			}).click(function () {
+		//				if ($(this).tooltip('option', 'disabled'))
+		//					$(this).tooltip('option', { disabled: false }).tooltip('open');
+		//				else
+		//					$(this).tooltip('option', { disabled: true }).tooltip('close');
+		//			}).hover(function () {
+		//				$(this).tooltip('option', { disabled: true }).tooltip('close');
+		//			}, function () {
+		//				$(this).tooltip('option', { disabled: true }).tooltip('close');
+		//			});
+		//		});
+
+		$(function () {
+			//debugger;
+			$(".ourKeyWord").mouseOver(
+				function (event) {
+					var offset = $(this).offset();
+
+					var x = offset.left + "px";
+					var y = offset.top + "px";
+					$("#divTooltip").css("top", y).css("left", x).show(1000);
+				}).mouseout(
+					function (event) {
+						var isOverTooltip = false;
+						if (event.relatedTarget.id != "divTooltip") {
+							var timeout = window.setTimeout(function () {
+								$("#divTooltip").hide(1000);
+							}, 2000);
+						}
+						//						$("#divTooltip").mouseover(function () {
+						//							window.clearTimeout(timeout);
+						//						}).mouseout(function () {
+						//							$(this).hide(1000);
+						//						});
+					}
+				);
+		});
+
+
+		function parseHTML() {
+			return "<div style='color: Red; width:300px; height:100px;'>An awesome html content.</div>";
+		}
+		function openTooltip() {
+			$(".ourKeyWord").tooltip("open");
+		}
+		//]]>
+	</script>
+	<div id="divTooltip" class="toolTipClass" style="display: none; background-color: Transparent; border:2px solid black;
+		position: absolute;">
+	</div>
+</body>
+</htm
