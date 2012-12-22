@@ -1,0 +1,11 @@
+.searchTxt {
+	width: 400px;
+	height: 30px;
+	font-size: 14pt;
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+.searchButton {
+	width: 200px;
+	height: 30px;
+}
