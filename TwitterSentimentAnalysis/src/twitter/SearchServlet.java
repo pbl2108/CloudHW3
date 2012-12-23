@@ -41,14 +41,17 @@ public class SearchServlet extends HttpServlet {
         URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed"); 
         
         
-
-        String value = null;
+        String[][] value = null;
 
         /* Check the MemCache first */
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-        value = (String) syncCache.get(query); // read from cache
-        if (value != null) return;
+        value = (String[][]) syncCache.get(query); // read from cache
+        if (value != null) {
+        	String buzzWord = value[0][0];
+			resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);
+        	return;
+        }
         
 
           
@@ -103,38 +106,31 @@ public class SearchServlet extends HttpServlet {
         /* Send to servlet */
         String buzzWord = buzz.getBuzz(); 
         
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"buzz\":");
-        sb.append('"');
-        sb.append(buzzWord);
-        sb.append('"');
-        sb.append(',');
-        
-        sb.append("\"query\":");
-        sb.append('"');
-        sb.append(req.getParameter("keywords"));
-        sb.append('"');
-        sb.append(',');
-        sb.append("\"results\" : [");
-        Boolean flag = true;
+        Boolean flag = true;        
+        String[][] strArray = new String[100][4];
+        strArray[0][0] = buzzWord;
+        strArray[0][1] = req.getParameter("keywords");
+        strArray[0][2] = "";
+        strArray[0][3] = ""; 
+        int count = 1;
         for (TwitterBean t : listOfTweets) {
     		if (buzz.isTweetBuzz(t.getText(), buzzWord) || flag) {
+    			
+    			strArray[count][0] = t.getText();
+    			strArray[count][1] = t.getFromUser();
+    			strArray[count][2] = t.getFromUserName();
+    			strArray[count][3] = t.getProfileImageUrl();
+    			
+    			count++;
+    			
     			System.out.println(t.getText());
-    			sb.append(t.toString());
-    			sb.append(',');
     			flag = false;
+    			
     		}
     	}
-    
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append("]}");
-        
-        String val = sb.toString();
-        System.out.println(val);
                 
         /* Store results in MemCache */
-        syncCache.put(query, val); // populate cache
+        syncCache.put(query, strArray); // populate cache
         
 
         resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);

@@ -57,43 +57,32 @@
 				
 				<%
 		  			String buzzWord = request.getParameter("buzz");
-		    		if (buzzWord != null) {
-		  			
-		  			
-		  					
+		    		if (buzzWord != null) {		  					
 							String query = request.getParameter("query");
         
-        					String value = null;
+        					String[][] value = null;
 		  					
 		  					MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         					syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-        					value = (String) syncCache.get(query); // read from cache
-        					if (value != null) {		  					
-							try {
-								JSONObject myjson = new JSONObject(value);
-        						JSONArray the_json_array = myjson.getJSONArray("results");
-        						
-        						String theBuzz = myjson.get("buzz").toString();
-        						String theQuery = myjson.get("query").toString();
+        					value = (String[][]) syncCache.get(query); // read from cache
+        					if (value != null) {
   
   
   				%>		
-  								<h4>You searched for: <%= theQuery %>.
-  									The buzz is about: <%= theBuzz %>.
+  								<h4>You searched for: <%= value[0][1] %>.
+  									The buzz is about: <%= value[0][0] %>.
   								</h4>
 							</div>
   			
   				<%
-        						int size = the_json_array.length();
-								for (int i = 0; i < size; i++) 
-						        { 
-						            JSONObject another_json_object = the_json_array.getJSONObject(i); 
-						  
-						            String text = another_json_object.get("text").toString(); 
-						            String from_user = another_json_object.get("from_user").toString(); 
-						            String from_user_name = another_json_object.get("from_user_name").toString(); 
-						            String created_at = another_json_object.get("created_at").toString(); 
-						            String profile_image_url = another_json_object.get("profile_image_url").toString(); 		  					
+        						//int size = the_json_array.length();
+								for (int i = 1; i < 100; i++) 
+						        {
+						        	String text = value[i][0]; 
+						            String from_user = value[i][1]; 
+						            String from_user_name = value[i][2];						             
+						            String profile_image_url = value[i][3];	
+						            if (text == null || text == "") break;	  					
 		      	%>
 				      			<div class="tweetContainer">
 									<div class="twitterContent">
@@ -113,14 +102,7 @@
 									</div>
 								</div>
 		      			
-				<%					}//for loop
-				
-								} catch (JSONException e){ 
-								%>
-									<p>The search did not return any results. Pleas try again.</p> 
-								<%
-								
-								}							
+				<%					}//for loop						
 							}
 						}	
 		  		%>
