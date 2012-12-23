@@ -46,7 +46,9 @@
   		<div class="content">
 			<div class="innerContent">
 			
-				
+				<div class="innerLeftContent">
+					PAST LINKS
+				</div>
 			
 			
   			<div class="toolTipClass1">
@@ -115,7 +117,7 @@
 				
 								} catch (JSONException e){ 
 								%>
-									EXCEPTION
+									<p>The search did not return any results. Pleas try again.</p> 
 								<%
 								
 								}							
