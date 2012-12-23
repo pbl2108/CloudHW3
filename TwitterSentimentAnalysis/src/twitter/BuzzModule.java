@@ -726,9 +726,9 @@ public class BuzzModule {
 		
 		String buzzMsg = highestKey;
 		
-		if ( frequencies.get(highestKey) == frequencies.get(secondHighestKey)){
-			buzzMsg = highestKey + " " + secondHighestKey;
-		}else
+		//if ( frequencies.get(highestKey) == frequencies.get(secondHighestKey)){
+		//	buzzMsg = highestKey + " " + secondHighestKey;
+		//}else
 			System.out.println("QUERY = " + this.query);
 			if(this.query.toLowerCase().contains(highestKey.toLowerCase())){
 				System.out.println("QUERY2");
