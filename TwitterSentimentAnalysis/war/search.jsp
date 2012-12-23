@@ -48,6 +48,26 @@
 			
 				<div class="innerLeftContent">
 					<h2>Past Searches</h2>
+					<% 
+						List<String> tweetUrls = null;
+						MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+        				syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+						tweetUrls = (List<String>) syncCache.get("tweetQueries"); // read from cache
+						if (tweetUrls != null) {
+						%>
+						<%
+							for (String linkUrl : tweetUrls) {
+						%>
+						<p>
+							<a href='<%= linkUrl %>'><%= linkUrl %> </a>
+						</p>	
+						<%
+						
+							}
+						}
+					
+					
+					%>
 				</div>
 			
 			
@@ -61,9 +81,6 @@
 							String query = request.getParameter("query");
         
         					String[][] value = null;
-		  					
-		  					MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        					syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
         					value = (String[][]) syncCache.get(query); // read from cache
         					if (value != null) {
   
@@ -74,8 +91,7 @@
   								</h4>
 							</div>
   			
-  				<%
-        						//int size = the_json_array.length();
+  				<%        						
 								for (int i = 1; i < 100; i++) 
 						        {
 						        	String text = value[i][0]; 

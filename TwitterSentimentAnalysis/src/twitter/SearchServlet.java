@@ -148,11 +148,12 @@ public class SearchServlet extends HttpServlet {
         
         /* Store results in MemCache */
         String key = req.getParameter("keywords").replace(" ", "_");
-        tweetQueries.add(key);
+        String redirectUrl = "/search.jsp?buzz=" + buzzWord + "&query=" + key;
+        tweetQueries.add(redirectUrl);
         syncCache.put(key, strArray); // populate cache
         syncCache.put("tweetQueries", tweetQueries);
 
-        resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + key);
+        resp.sendRedirect(redirectUrl);
 
     } 
       
