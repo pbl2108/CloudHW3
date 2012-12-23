@@ -47,7 +47,7 @@
 			<div class="innerContent">
 			
 				<div class="innerLeftContent">
-					PAST LINKS
+					<h2>Past Searches</h2>
 				</div>
 			
 			

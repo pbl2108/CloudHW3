@@ -123,17 +123,18 @@ public class SearchServlet extends HttpServlet {
     			
     			count++;
     			
-    			System.out.println(t.getText());
+    			System.out.println("Heyyyy    " + t.getText());
     			flag = false;
     			
     		}
     	}
                 
         /* Store results in MemCache */
-        syncCache.put(query, strArray); // populate cache
+        String key = req.getParameter("keywords").replace(" ", "_");
+        syncCache.put(key, strArray); // populate cache
         
 
-        resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);
+        resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + key);
 
     } 
       
