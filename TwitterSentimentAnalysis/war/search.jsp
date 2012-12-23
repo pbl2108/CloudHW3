@@ -97,9 +97,15 @@
 		  		<%
 		  			String buzzWord = request.getParameter("buzz");
 		    		if (buzzWord != null) {
+		    			
+		    		String query = request.getParameter("query");
+		    		query = request.getParameter("query").replace("%20", " ");
 		  			
 		  			PersistenceManager pm = PMF.get().getPersistenceManager();
 		  			BuzzModule buzz = new BuzzModule();
+		  			
+		  			buzz.addStopWord(query);
+		  			buzz.rmStopWord(query);
 		  			
 		  			Query q = pm.newQuery(TwitterBean.class);
 					try {

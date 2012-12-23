@@ -33,8 +33,8 @@ public class SearchServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) 
             throws IOException { 
           
-        String query = req.getParameter("keywords"); 
-        query = query.replace(" ","%20"); 
+        String query0 = req.getParameter("keywords"); 
+        String query = query0.replace(" ","%20"); 
         URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed"); 
           
         URLConnection yc = Twitter.openConnection(); 
@@ -77,13 +77,13 @@ public class SearchServlet extends HttpServlet {
         
         BuzzModule buzz = new BuzzModule();
         
-        buzz.addStopWord(query);
+        buzz.addStopWord(query0);
         
         for (TwitterBean t : listOfTweets) {
     		buzz.analyzeBuzz(t.getText());
     	}
         
-        buzz.rmStopWord(query);
+        buzz.rmStopWord(query0);
         
         /* Send to servlet */
         String buzzWord = buzz.getBuzz(); 
@@ -96,7 +96,7 @@ public class SearchServlet extends HttpServlet {
     	}
           
         
-        resp.sendRedirect("/search.jsp?buzz=" + buzzWord); 
+        resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query); 
     } 
       
     /** 
