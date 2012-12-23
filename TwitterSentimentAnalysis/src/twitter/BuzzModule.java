@@ -556,6 +556,8 @@ public class BuzzModule {
 			"ht",
 			"oh",
 			"ff",
+			" ",
+			""
 		}));
 	public HashMap<String,Integer> frequencies=new HashMap<String,Integer>();
 	
@@ -585,8 +587,14 @@ public class BuzzModule {
 //		
 //    	buzz.rmStopWord("Cloud Computing");
 //    	
-//    	buzz.getBuzz();
-//			
+//    	String buzzWord = buzz.getBuzz();
+//    	
+//    	i=0;
+//    	while (i < text.length){
+//    		if (buzz.isTweetBuzz(text[i], buzzWord))
+//    			System.out.println(text[i]);
+//			i++;
+//    	}
 //    }
     
     public void addStopWord(String text) {
@@ -594,6 +602,7 @@ public class BuzzModule {
     	
     	for (String w: Arrays.asList(words)){
     		w = w.replaceAll("[^a-z][^0-9]", "");
+    		w = w.replaceAll("\\W", ""); 
     		this.stopWords.add(w);
     	}
 		
@@ -604,6 +613,7 @@ public class BuzzModule {
     	
     	for (String w: Arrays.asList(words)){
     		w = w.replaceAll("[^a-z][^0-9]", "");
+    		w = w.replaceAll("\\W", ""); 
     		this.stopWords.remove(w);
     	}
 		
@@ -614,6 +624,7 @@ public class BuzzModule {
     	
     	for (String w: Arrays.asList(words)){
     		w = w.replaceAll("[^a-z][^0-9]", "");
+    		w = w.replaceAll("\\W", ""); 
     		if( stopWords.contains(w)) {
     			    continue;
     			  }
@@ -625,6 +636,23 @@ public class BuzzModule {
     		
     		System.out.println(w + " " + frequencies.get(w) + " " + text);
     	}
+    }
+	
+	public boolean isTweetBuzz(String text, String buzz){
+    	String[] words = text.toLowerCase().split(" ");
+    	
+  		buzz = buzz.toLowerCase().replaceAll("[^a-z][^0-9]", "");
+    	buzz = buzz.replaceAll("\\W", ""); 
+    	
+    	for (String w: Arrays.asList(words)){
+    		w = w.replaceAll("[^a-z][^0-9]", "");
+    		w = w.replaceAll("\\W", ""); 
+    		if( buzz.equals(w)) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
     
     public String getBuzz(){

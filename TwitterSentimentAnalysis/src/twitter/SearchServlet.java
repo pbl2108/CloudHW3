@@ -35,7 +35,7 @@ public class SearchServlet extends HttpServlet {
           
         String query = req.getParameter("keywords"); 
         query = query.replace(" ","%20"); 
-        URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query); 
+        URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed"); 
           
         URLConnection yc = Twitter.openConnection(); 
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream())); 
@@ -84,9 +84,18 @@ public class SearchServlet extends HttpServlet {
     	}
         
         buzz.rmStopWord(query);
-          
+        
         /* Send to servlet */
         String buzzWord = buzz.getBuzz(); 
+        
+        System.out.println();
+        System.out.println();
+        for (TwitterBean t : listOfTweets) {
+    		if (buzz.isTweetBuzz(t.getText(), buzzWord))
+    			System.out.println(t.getText());
+    	}
+          
+        
         resp.sendRedirect("/search.jsp?buzz=" + buzzWord); 
     } 
       
