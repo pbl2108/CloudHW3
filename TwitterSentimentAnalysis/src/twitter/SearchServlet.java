@@ -46,10 +46,10 @@ public class SearchServlet extends HttpServlet {
         /* Check the MemCache first */
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-        value = (String[][]) syncCache.get(query); // read from cache
+        value = (String[][]) syncCache.get(query0.replace(" ", "_")); // read from cache
         if (value != null) {
         	String buzzWord = value[0][0];
-			resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);
+			resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query0.replace(" ", "_"));
         	return;
         }
         
