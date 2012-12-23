@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
@@ -14,6 +15,7 @@ import javax.jdo.annotations.PrimaryKey;
  * @author peter
  * 
  */
+@PersistenceCapable
 public class TwitterBean {
     @PrimaryKey
     @Persistent
