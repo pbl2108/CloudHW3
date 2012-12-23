@@ -128,9 +128,11 @@ public class SearchServlet extends HttpServlet {
         sb.deleteCharAt(sb.length() - 1);
         sb.append("]}");
         
+        String val = sb.toString();
+        System.out.println(val);
                 
         /* Store results in MemCache */
-        syncCache.put(query, sb.toString()); // populate cache
+        syncCache.put(query, val); // populate cache
         
 
         resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);

@@ -14,6 +14,9 @@
 <%@ page import="com.google.appengine.api.memcache.ErrorHandlers" %>
 <%@ page import="com.google.appengine.api.memcache.MemcacheService" %>
 <%@ page import="com.google.appengine.api.memcache.MemcacheServiceFactory" %>
+<%@ page import="com.google.appengine.labs.repackaged.org.json.JSONObject" %>
+<%@ page import="com.google.appengine.labs.repackaged.org.json.JSONArray" %>
+<%@ page import="com.google.appengine.labs.repackaged.org.json.JSONException" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -110,58 +113,60 @@
 				<%
 		  			String buzzWord = request.getParameter("buzz");
 		    		if (buzzWord != null) {
-		    			
-		    		String query = request.getParameter("query");
-		    		query = request.getParameter("query").replace("%20", " ");
 		  			
 		  			
-<<<<<<< HEAD
-		  			buzz.addStopWord(query);
-		  			buzz.rmStopWord(query);
-		  			
-		  			Query q = pm.newQuery(TwitterBean.class);
-					try {
-		  					List<TwitterBean> listOfTweets = (List<TwitterBean>) q.execute();
-		  					if (!listOfTweets.isEmpty()) {
-=======
 		  					
 							String query = request.getParameter("query");
         
-        					SearchResult value = null;
+        					String value = null;
 		  					
 		  					MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         					syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-        					value = (SearchResult) syncCache.get(query); // read from cache
-        					if (value != null) {  
-		  					
-		  						List<TwitterBean> listOfTweets = value.getTweets();
->>>>>>> 163da7eb35fb8a8e10df09f3675773e262fcfaff
-		  						int count = 0;
-		    					for (TwitterBean t : listOfTweets) {
-		    						count++;
+        					value = (String) syncCache.get(query); // read from cache
+        					if (value != null) {		  					
+							try {
+								JSONObject myjson = new JSONObject(value);
+        						JSONArray the_json_array = myjson.getJSONArray("results"); 
+  
+        						int size = the_json_array.length();
+								for (int i = 0; i < size; i++) 
+						        { 
+						            JSONObject another_json_object = the_json_array.getJSONObject(i); 
+						  
+						            String tweet_id = another_json_object.get("id_str").toString(); 
+						            String text = another_json_object.get("text").toString(); 
+						            String from_user = another_json_object.get("from_user").toString(); 
+						            String from_user_name = another_json_object.get("from_user_name").toString(); 
+						            String created_at = another_json_object.get("created_at").toString(); 
+						            String profile_image_url = another_json_object.get("profile_image_url").toString(); 		  					
 		      	%>
 				      			<div class="tweetContainer">
 									<div class="twitterContent">
 										<div class="tweetHeader">
 											<a href="javascript:void(0)" target="_blank" class="userAnchor">
-												<strong><%= t.getFromUserName()%></strong> <span class="userSpan">
+												<strong><%= from_user_name %></strong> <span class="userSpan">
 												<s>@</s> 
-												<b><%= t.getFromUser()%></b>
+												<b><%= from_user%></b>
 											</span>
-												<img class="avatarClass" src="<%= t.getProfileImageUrl()%>"
-													alt="rrr" />
+												<img class="avatarClass" src="<%= profile_image_url %>"
+													alt="avatar" />
 											</a>
 										</div>
 										<p>
-											<%= t.getText() %>
+											<%= text %>
 										</p>
 									</div>
 								</div>
 		      			
-				<%					if (count > 20) break;
-								}
+				<%					}//for loop
+				
+								} catch (JSONException e){ 
+								%>
+									EXCEPTION
+								<%
+								
+								}							
 							}
-
 						}	
 		  		%>
 				
