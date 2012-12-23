@@ -1,11 +1,145 @@
-.searchTxt {
-	width: 400px;
-	height: 30px;
-	font-size: 14pt;
-	border: 1px solid gray;
-	border-radius: 5px;
-}
-.searchButton {
-	width: 200px;
-	height: 30px;
-}
+		.ourKeyWord {
+			font-size: 30px;
+			color: Red !important;
+		}
+
+		.tweetContainer {
+			position: relative;
+			padding: 12px;
+			border-bottom: 1px solid #e8e8e8;
+			cursor: pointer;
+		}
+
+		.tweetContainerTopTwitters {
+			position: relative;
+			border-bottom: 1px solid #e8e8e8;
+			cursor: pointer;
+			padding: 12px;
+		}
+
+		.tweetContainer:hover, .tweetContainerTopTwitters:hover {
+			background-color: #f5f5f5;
+		}
+
+		.twitterContent {
+			margin-left: 58px;
+		}
+
+		.toolTipClass h2, .toolTipClass p {
+			margin: 0;
+		}
+
+		.userAnchor {
+			color: #999999;
+			text-decoration: none;
+		}
+
+		.userAnchor strong {
+			color: #333333;
+		}
+
+		.userAnchor:hover strong {
+			color: #0084b4;
+			text-decoration: underline;
+		}
+
+		.userSpan {
+			font-size: 12px;
+		}
+
+		.userSpan s {
+			text-decoration: none;
+		}
+
+		.userSpan b {
+			font-weight: normal;
+		}
+
+		.avatarClass {
+			position: absolute;
+			left: 12px;
+			top: 12px;
+			border-radius: 5px;
+			height: 48px;
+			width: 48px;
+		}
+
+		.pagebackground {
+			background-color: beige;
+		}
+
+		.header {
+			width: 100%;
+			height: 30px;
+			box-shadow: 0 2px 2px 3px #d8d8d8;
+			left: 0;
+			position: fixed;
+			right: 0;
+			top: 0;
+			z-index: 99999;
+			background-color: #c6c6c6;
+			padding: 5px 0 0 0;
+		}
+
+		.innerContent {
+			width: 60%;
+			margin: 55px auto 0% auto;
+		}
+
+		.innerLeftContent {
+			float: right;
+			width: 35%;
+		}
+
+		.toolTipClass, .toolTipClass1 {
+			min-height: 100px;
+			overflow: hidden;
+			border: 1px solid #e8e8e8;
+			border-radius: 5px;
+			color: #333333;
+			background-color: #fff;
+			box-shadow: 0 0 8px 8px #d8d8d8;
+		}
+
+		.toolTipClass {
+			font-family: Arial,sans-serif;
+			font-size: 11px;
+			font-family: Arial,sans-serif;
+			line-height: 14px;
+		}
+
+		.toolTipClass1 {
+			float: left;
+			width: 60%;
+			font-size: 14px;
+			font-family: Arial,sans-serif;
+			line-height: 18px;
+		}
+
+		.content {
+			width: 100%;
+		}
+
+		.innerHeader {
+			width: 58%;
+			margin: 0% auto;
+		}
+
+		.loadNextTopTwitters {
+			padding: 12px 12px 12px 40px;
+		}
+
+		.innerHeader input[type='text'] {
+			width: 32%;
+			border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			margin: 0 5px 0 0px;
+		}
+
+		.innerHeader input[type='button'] {
+			border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			font-family: Arial;
+		}
