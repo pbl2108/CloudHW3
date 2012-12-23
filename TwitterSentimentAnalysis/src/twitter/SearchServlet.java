@@ -41,12 +41,12 @@ public class SearchServlet extends HttpServlet {
         
         
 
-        SearchResult value;
+        String value = null;
 
         /* Check the MemCache first */
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
-        value = (SearchResult) syncCache.get(query); // read from cache
+        value = (String) syncCache.get(query); // read from cache
         if (value != null) return;
         
           
@@ -101,17 +101,34 @@ public class SearchServlet extends HttpServlet {
         /* Send to servlet */
         String buzzWord = buzz.getBuzz(); 
         
-        System.out.println();
-        System.out.println();
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"buzz\":");
+        sb.append('"');
+        sb.append(buzzWord);
+        sb.append('"');
+        sb.append(',');
+        
+        sb.append("\"query\":");
+        sb.append('"');
+        sb.append(req.getParameter("keywords"));
+        sb.append('"');
+        sb.append(',');
+        sb.append("\"results\" : [");
         for (TwitterBean t : listOfTweets) {
-    		if (buzz.isTweetBuzz(t.getText(), buzzWord))
+    		if (buzz.isTweetBuzz(t.getText(), buzzWord)) {
     			System.out.println(t.getText());
+    			sb.append(t.toString());
+    			sb.append(',');
+    		}
     	}
-          
-               
-        value = new SearchResult(buzzWord, listOfTweets);        
+    
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("]}");
+        
+                
         /* Store results in MemCache */
-        syncCache.put(query, value); // populate cache
+        syncCache.put(query, sb.toString()); // populate cache
         
         resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);
     } 
@@ -126,10 +143,10 @@ public class SearchServlet extends HttpServlet {
     public List<TwitterBean> parseJSON(String json)  
             throws JSONException { 
           
-        JSONObject myjson = new JSONObject(json); 
+        JSONObject myjson = new JSONObject(json);
         JSONArray the_json_array = myjson.getJSONArray("results"); 
   
-        int size = the_json_array.length(); 
+        int size = the_json_array.length();
         //ArrayList<JSONObject> arrays = new ArrayList<JSONObject>(); 
         List<TwitterBean> listOfTweets = new ArrayList<TwitterBean>(); 
   
