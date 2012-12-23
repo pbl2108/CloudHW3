@@ -42,7 +42,9 @@ public class SearchServlet extends HttpServlet {
         
         
         String[][] value = null;
+        List<String> tweetQueries = null;
 
+        
         /* Check the MemCache first */
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
@@ -53,8 +55,7 @@ public class SearchServlet extends HttpServlet {
         	return;
         }
         
-
-          
+     
         URLConnection yc = Twitter.openConnection(); 
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream())); 
           
@@ -128,11 +129,28 @@ public class SearchServlet extends HttpServlet {
     			
     		}
     	}
-                
+        
+        
+        tweetQueries = (List)syncCache.get("tweetQueries");
+        if (tweetQueries != null) {
+        	System.out.print("Past Search terms: ");
+ 	        for (String s : tweetQueries){
+ 	        	System.out.print(s + " ");
+ 	        }
+         }
+       
+        if (tweetQueries == null)
+     	   tweetQueries = new ArrayList<String>();
+        
+        if (tweetQueries.size() == 10){
+        	tweetQueries.remove(0);
+        }
+        
         /* Store results in MemCache */
         String key = req.getParameter("keywords").replace(" ", "_");
+        tweetQueries.add(key);
         syncCache.put(key, strArray); // populate cache
-        
+        syncCache.put("tweetQueries", tweetQueries);
 
         resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + key);
 
