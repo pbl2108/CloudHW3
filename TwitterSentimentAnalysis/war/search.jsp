@@ -4,12 +4,14 @@
 <%@ page import="javax.jdo.Query" %>
 <%@ page import="twitter.TwitterBean" %>
 <%@ page import="twitter.PMF" %>
+<%@ page import="twitter.BuzzModule" %>
 
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 
 <%@ page import="javax.jdo.PersistenceManager" %>
+
 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -97,6 +99,7 @@
 		    		if (buzzWord != null) {
 		  			
 		  			PersistenceManager pm = PMF.get().getPersistenceManager();
+		  			BuzzModule buzz = new BuzzModule();
 		  			
 		  			Query q = pm.newQuery(TwitterBean.class);
 					try {
@@ -104,6 +107,9 @@
 		  					if (!listOfTweets.isEmpty()) {
 		  						int count = 0;
 		    					for (TwitterBean t : listOfTweets) {
+		    						
+		    						
+		    						if (buzz.isTweetBuzz(t.getText(), buzzWord)){
 		    						count++;
 		      	%>
 				      			<div class="tweetContainer">
@@ -124,7 +130,8 @@
 									</div>
 								</div>
 		      			
-				<%				if (count > 20) break;
+				<%				if (count > 10) break;
+		    						}
 								}
 		  					} else {
 								// Handle "no results" case

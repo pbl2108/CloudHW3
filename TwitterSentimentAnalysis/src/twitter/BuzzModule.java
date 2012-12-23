@@ -265,6 +265,7 @@ public class BuzzModule {
 			"liked",
 			"likely",
 			"little",
+			"lol",
 			"look",
 			"looking",
 			"looks",
@@ -306,6 +307,7 @@ public class BuzzModule {
 			"noone",
 			"nor",
 			"normally",
+			"not",
 			"nothing",
 			"novel",
 			"now",
@@ -358,6 +360,8 @@ public class BuzzModule {
 			"regarding",
 			"regardless",
 			"regards",
+			"require",
+			"requires",
 			"relatively",
 			"respectively",
 			"right",
@@ -556,10 +560,12 @@ public class BuzzModule {
 			"ht",
 			"oh",
 			"ff",
+			"de",
 			" ",
 			""
 		}));
 	public HashMap<String,Integer> frequencies=new HashMap<String,Integer>();
+	public String search; 
 	
 //    public static void main(String[] args) {
 //    	
@@ -601,7 +607,7 @@ public class BuzzModule {
     	String[] words = text.toLowerCase().split(" ");
     	
     	for (String w: Arrays.asList(words)){
-    		w = w.replaceAll("[^a-z][^0-9]", "");
+    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		this.stopWords.add(w);
     	}
@@ -612,7 +618,7 @@ public class BuzzModule {
     	String[] words = text.toLowerCase().split(" ");
     	
     	for (String w: Arrays.asList(words)){
-    		w = w.replaceAll("[^a-z][^0-9]", "");
+    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		this.stopWords.remove(w);
     	}
@@ -623,11 +629,11 @@ public class BuzzModule {
     	String[] words = text.toLowerCase().split(" ");
     	
     	for (String w: Arrays.asList(words)){
-    		w = w.replaceAll("[^a-z][^0-9]", "");
+    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		if( stopWords.contains(w)) {
     			    continue;
-    			  }
+    		}
     		Integer num=frequencies.get(w);
     		if (num!=null)
     			frequencies.put(w,num+1);
@@ -641,11 +647,11 @@ public class BuzzModule {
 	public boolean isTweetBuzz(String text, String buzz){
     	String[] words = text.toLowerCase().split(" ");
     	
-  		buzz = buzz.toLowerCase().replaceAll("[^a-z][^0-9]", "");
+  		//buzz = buzz.toLowerCase().replaceAll("[^a-z][^0-9]", "");
     	buzz = buzz.replaceAll("\\W", ""); 
     	
     	for (String w: Arrays.asList(words)){
-    		w = w.replaceAll("[^a-z][^0-9]", "");
+    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		if( buzz.equals(w)) {
     			return true;
@@ -717,10 +723,13 @@ public class BuzzModule {
 		
 		String buzzMsg = null;
 		
+
+		
 		if ( frequencies.get(highestKey) == frequencies.get(secondHighestKey)){
 			buzzMsg = highestKey + " " + secondHighestKey;
 		}else
-			buzzMsg = highestKey;
+			//if(this.search.contains(highestKey))
+				buzzMsg = highestKey;
 		
 		return buzzMsg;
     }
