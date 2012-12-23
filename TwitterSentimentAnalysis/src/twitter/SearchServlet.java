@@ -7,12 +7,14 @@ import java.net.URL;
 import java.net.URLConnection; 
 import java.util.ArrayList; 
 import java.util.List; 
+import java.util.logging.Level;
   
-import javax.jdo.PersistenceManager; 
-import javax.servlet.RequestDispatcher; 
-import javax.servlet.ServletException; 
+import javax.jdo.PersistenceManager;  
 import javax.servlet.http.*; 
   
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray; 
 import com.google.appengine.labs.repackaged.org.json.JSONException; 
 import com.google.appengine.labs.repackaged.org.json.JSONObject; 
@@ -35,7 +37,18 @@ public class SearchServlet extends HttpServlet {
           
         String query = req.getParameter("keywords"); 
         query = query.replace(" ","%20"); 
-        URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed"); 
+        URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed");
+        
+        
+
+        SearchResult value;
+
+        /* Check the MemCache first */
+        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+        value = (SearchResult) syncCache.get(query); // read from cache
+        if (value != null) return;
+        
           
         URLConnection yc = Twitter.openConnection(); 
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream())); 
@@ -95,8 +108,12 @@ public class SearchServlet extends HttpServlet {
     			System.out.println(t.getText());
     	}
           
+               
+        value = new SearchResult(buzzWord, listOfTweets);        
+        /* Store results in MemCache */
+        syncCache.put(query, value); // populate cache
         
-        resp.sendRedirect("/search.jsp?buzz=" + buzzWord); 
+        resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);
     } 
       
     /** 
