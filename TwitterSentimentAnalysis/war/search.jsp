@@ -2,10 +2,18 @@
 
 <%@ page import="java.util.List" %>
 <%@ page import="javax.jdo.Query" %>
+<%@ page import="java.util.logging.Level" %>
+
 <%@ page import="twitter.TwitterBean" %>
 <%@ page import="twitter.PMF" %>
 <%@ page import="twitter.BuzzModule" %>
+<%@ page import="twitter.SearchResult" %>
 
+
+
+<%@ page import="com.google.appengine.api.memcache.ErrorHandlers" %>
+<%@ page import="com.google.appengine.api.memcache.MemcacheService" %>
+<%@ page import="com.google.appengine.api.memcache.MemcacheServiceFactory" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -93,17 +101,21 @@
 	  			<div class="tweetContainer">
 					<h4>Tweets</h4>
 				</div>
-  		
-		  		<%
+				
+				
+				
+				
+				
+				
+				<%
 		  			String buzzWord = request.getParameter("buzz");
 		    		if (buzzWord != null) {
 		    			
 		    		String query = request.getParameter("query");
 		    		query = request.getParameter("query").replace("%20", " ");
 		  			
-		  			PersistenceManager pm = PMF.get().getPersistenceManager();
-		  			BuzzModule buzz = new BuzzModule();
 		  			
+<<<<<<< HEAD
 		  			buzz.addStopWord(query);
 		  			buzz.rmStopWord(query);
 		  			
@@ -111,11 +123,21 @@
 					try {
 		  					List<TwitterBean> listOfTweets = (List<TwitterBean>) q.execute();
 		  					if (!listOfTweets.isEmpty()) {
+=======
+		  					
+							String query = request.getParameter("query");
+        
+        					SearchResult value = null;
+		  					
+		  					MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+        					syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+        					value = (SearchResult) syncCache.get(query); // read from cache
+        					if (value != null) {  
+		  					
+		  						List<TwitterBean> listOfTweets = value.getTweets();
+>>>>>>> 163da7eb35fb8a8e10df09f3675773e262fcfaff
 		  						int count = 0;
 		    					for (TwitterBean t : listOfTweets) {
-		    						
-		    						
-		    						if (buzz.isTweetBuzz(t.getText(), buzzWord)){
 		    						count++;
 		      	%>
 				      			<div class="tweetContainer">
@@ -136,17 +158,18 @@
 									</div>
 								</div>
 		      			
-				<%				if (count > 10) break;
-		    						}
+				<%					if (count > 20) break;
 								}
-		  					} else {
-								// Handle "no results" case
-		  					}
-						} finally {
-		  					q.closeAll();
-						}
-					}	
+							}
+
+						}	
 		  		%>
+				
+				
+				
+				
+  		
+
   				</div>
   				<div style="clear: both"></div>
   			</div>
