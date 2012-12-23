@@ -9,8 +9,6 @@
 <%@ page import="twitter.BuzzModule" %>
 <%@ page import="twitter.SearchResult" %>
 
-
-
 <%@ page import="com.google.appengine.api.memcache.ErrorHandlers" %>
 <%@ page import="com.google.appengine.api.memcache.MemcacheService" %>
 <%@ page import="com.google.appengine.api.memcache.MemcacheServiceFactory" %>
@@ -48,66 +46,11 @@
   		<div class="content">
 			<div class="innerContent">
 			
-				<div class="innerLeftContent">
-				<div class="toolTipClass">
-					<div class="tweetContainer">
-						<span>Last search results
-						</span>* <a href="#">Refresh</a> * <a href="#">View All</a>
-					</div>
-					<div class="tweetContainer">
-						<div class="twitterContent">
-							<div class="tweetHeader">
-								<a href="http://www.twitter.com/patkelsey" target="_blank" class="userAnchor"><strong>data["from_user_name"] Thom at Yahoo</strong> <span class="userSpan"><s>@</s> <b>data["from_user"]</b>
-								</span>
-									<img class="avatarClass" src="http://a0.twimg.com/profile_images/1510199369/unser_Multiuniversum_normal.jpg"
-										alt="rrr" />
-								</a>
-							</div>
-							<p>
-								@patkelsey I just wanted to thank you for your...
-							</p>
-						</div>
-					</div>
-					<div class="tweetContainer">
-						<div class="twitterContent">
-							<div class="tweetHeader">
-								<a href="http://www.twitter.com/patkelsey" target="_blank" class="userAnchor"><strong>data["from_user_name"] Thom at Yahoo</strong> <span class="userSpan"><s>@</s> <b>data["from_user"]</b>
-								</span>
-									<img class="avatarClass" src="http://a0.twimg.com/profile_images/1510199369/unser_Multiuniversum_normal.jpg"
-										alt="rrr" />
-								</a>
-							</div>
-							<p>
-								@patkelsey I just wanted to thank you...
-							</p>
-						</div>
-					</div>
-					<div class="tweetContainer">
-						<div class="twitterContent">
-							<div class="tweetHeader">
-								<a href="http://www.twitter.com/patkelsey" target="_blank" class="userAnchor"><strong>data["from_user_name"] Thom at Yahoo</strong> <span class="userSpan"><s>@</s> <b>data["from_user"]</b>
-								</span>
-									<img class="avatarClass" src="http://a0.twimg.com/profile_images/1510199369/unser_Multiuniversum_normal.jpg"
-										alt="rrr" />
-								</a>
-							</div>
-							<p>
-								@patkelsey I just wanted to thank...
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
+				
 			
 			
   			<div class="toolTipClass1">
 	  			<div class="tweetContainer">
-					<h4>Tweets</h4>
-				</div>
-				
-				
-				
-				
 				
 				
 				<%
@@ -126,14 +69,24 @@
         					if (value != null) {		  					
 							try {
 								JSONObject myjson = new JSONObject(value);
-        						JSONArray the_json_array = myjson.getJSONArray("results"); 
+        						JSONArray the_json_array = myjson.getJSONArray("results");
+        						
+        						String theBuzz = myjson.get("buzz").toString();
+        						String theQuery = myjson.get("query").toString();
   
+  
+  				%>		
+  								<h4>You searched for: <%= theQuery %>.
+  									The buzz is about: <%= theBuzz %>.
+  								</h4>
+							</div>
+  			
+  				<%
         						int size = the_json_array.length();
 								for (int i = 0; i < size; i++) 
 						        { 
 						            JSONObject another_json_object = the_json_array.getJSONObject(i); 
 						  
-						            String tweet_id = another_json_object.get("id_str").toString(); 
 						            String text = another_json_object.get("text").toString(); 
 						            String from_user = another_json_object.get("from_user").toString(); 
 						            String from_user_name = another_json_object.get("from_user_name").toString(); 

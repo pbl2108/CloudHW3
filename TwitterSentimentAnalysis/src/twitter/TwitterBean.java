@@ -115,7 +115,7 @@ public class TwitterBean {
     
     public String toString() {
     	DateFormat dt = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-    	return "{id_str:\"" + this._tweetId +"\", text: \"" + this._text.replaceAll("\"", "\\\"") + "\", from_user: \"" + 
+    	return "{id_str:\"" + this._tweetId +"\", text: '" + this._text.replace('\'', '-') + "', from_user: \"" + 
     			this._fromUser + "\", from_user_name:\"" + 
     			this._fromUserName + "\", profile_image_url: \"" + this._profileImageUrl + "\", created_at: \"" + dt.format(this._createdAt) + "\"}";
     }

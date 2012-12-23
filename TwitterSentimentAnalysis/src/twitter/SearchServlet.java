@@ -117,11 +117,13 @@ public class SearchServlet extends HttpServlet {
         sb.append('"');
         sb.append(',');
         sb.append("\"results\" : [");
+        Boolean flag = true;
         for (TwitterBean t : listOfTweets) {
-    		if (buzz.isTweetBuzz(t.getText(), buzzWord)) {
+    		if (buzz.isTweetBuzz(t.getText(), buzzWord) || flag) {
     			System.out.println(t.getText());
     			sb.append(t.toString());
     			sb.append(',');
+    			flag = false;
     		}
     	}
     
