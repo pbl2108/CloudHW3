@@ -139,6 +139,7 @@ public class BuzzModule {
 			"either",
 			"else",
 			"elsewhere",
+			"en",
 			"enough",
 			"entirely",
 			"especially",
@@ -565,7 +566,7 @@ public class BuzzModule {
 			""
 		}));
 	public HashMap<String,Integer> frequencies=new HashMap<String,Integer>();
-	public String search; 
+	public String query; 
 	
 //    public static void main(String[] args) {
 //    	
@@ -604,10 +605,10 @@ public class BuzzModule {
 //    }
     
     public void addStopWord(String text) {
+    	this.query = text;
     	String[] words = text.toLowerCase().split(" ");
     	
     	for (String w: Arrays.asList(words)){
-    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		this.stopWords.add(w);
     	}
@@ -618,7 +619,6 @@ public class BuzzModule {
     	String[] words = text.toLowerCase().split(" ");
     	
     	for (String w: Arrays.asList(words)){
-    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		this.stopWords.remove(w);
     	}
@@ -629,7 +629,6 @@ public class BuzzModule {
     	String[] words = text.toLowerCase().split(" ");
     	
     	for (String w: Arrays.asList(words)){
-    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		if( stopWords.contains(w)) {
     			    continue;
@@ -646,15 +645,16 @@ public class BuzzModule {
 	
 	public boolean isTweetBuzz(String text, String buzz){
     	String[] words = text.toLowerCase().split(" ");
-    	
-  		//buzz = buzz.toLowerCase().replaceAll("[^a-z][^0-9]", "");
-    	buzz = buzz.replaceAll("\\W", ""); 
-    	
+
+    	buzz = buzz.replaceAll("\\W", "");
+     	
     	for (String w: Arrays.asList(words)){
-    		//w = w.replaceAll("[^a-z][^0-9]", "");
     		w = w.replaceAll("\\W", ""); 
     		if( buzz.equals(w)) {
-    			return true;
+    			if (text.toLowerCase().contains(query.toLowerCase()))
+    				return true;
+    			else
+    				continue;
     		}
     	}
     	
@@ -664,12 +664,15 @@ public class BuzzModule {
     public String getBuzz(){
     	Iterator iterator = frequencies.keySet().iterator();  
 
-
+//    	String topResults[] = new String[5];
+//    	for (int i = 0; i<topResults.length ; i++)
+//    		topResults[i]= "";
+    	
     	int value = 0;
-    	String highestKey = null;
-    	String secondHighestKey = null;
+    	String highestKey = "";
+    	String secondHighestKey = "";
     	int secondValue = 0;
-    	String thirdHighestKey = null;
+    	String thirdHighestKey = "";
     	int thirdValue = 0;
 
 
@@ -686,10 +689,10 @@ public class BuzzModule {
     		if (value <= tmpValue){
     			value = tmpValue;
     			thirdHighestKey = secondHighestKey;
-    			if(thirdHighestKey != null)
+    			if(thirdHighestKey != "")
     				thirdValue = frequencies.get(thirdHighestKey);
     			secondHighestKey = highestKey;
-    			if(secondHighestKey != null)
+    			if(secondHighestKey != "")
     				secondValue = frequencies.get(secondHighestKey);
     			highestKey = key;
     			continue;
@@ -698,9 +701,9 @@ public class BuzzModule {
     		if (secondValue <= tmpValue){
     			thirdHighestKey = secondHighestKey;
     			secondHighestKey = key;
-    			if(thirdHighestKey != null)
+    			if(thirdHighestKey != "")
     				thirdValue = secondValue = frequencies.get(thirdHighestKey);
-    			if(secondHighestKey != null)
+    			if(secondHighestKey != "")
     				secondValue = frequencies.get(secondHighestKey);
     			continue;
     		}
@@ -721,15 +724,23 @@ public class BuzzModule {
 		System.out.println(secondHighestKey + " " + frequencies.get(secondHighestKey));
 		System.out.println(thirdHighestKey + " " +  frequencies.get(thirdHighestKey));
 		
-		String buzzMsg = null;
-		
-
+		String buzzMsg = highestKey;
 		
 		if ( frequencies.get(highestKey) == frequencies.get(secondHighestKey)){
 			buzzMsg = highestKey + " " + secondHighestKey;
 		}else
-			//if(this.search.contains(highestKey))
-				buzzMsg = highestKey;
+			System.out.println("QUERY = " + this.query);
+			if(this.query.toLowerCase().contains(highestKey.toLowerCase())){
+				System.out.println("QUERY2");
+				if(this.query.toLowerCase().contains(secondHighestKey.toLowerCase())){
+					System.out.println("QUERY3");
+					buzzMsg = thirdHighestKey;
+				}else{
+					System.out.println("QUERY4");
+					buzzMsg = secondHighestKey;
+				}
+			}
+				
 		
 		return buzzMsg;
     }

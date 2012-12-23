@@ -35,9 +35,10 @@ public class SearchServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) 
             throws IOException { 
           
-        String query = req.getParameter("keywords"); 
-        query = query.replace(" ","%20"); 
-        URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed");
+
+        String query0 = req.getParameter("keywords"); 
+        String query = query0.replace(" ","%20"); 
+        URL Twitter = new URL("http://search.twitter.com/search.json?q=" + query + "&rpp=100" + "&result_type=mixed"); 
         
         
 
@@ -49,6 +50,7 @@ public class SearchServlet extends HttpServlet {
         value = (String) syncCache.get(query); // read from cache
         if (value != null) return;
         
+
           
         URLConnection yc = Twitter.openConnection(); 
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream())); 
@@ -90,13 +92,13 @@ public class SearchServlet extends HttpServlet {
         
         BuzzModule buzz = new BuzzModule();
         
-        buzz.addStopWord(query);
+        buzz.addStopWord(query0);
         
         for (TwitterBean t : listOfTweets) {
     		buzz.analyzeBuzz(t.getText());
     	}
         
-        buzz.rmStopWord(query);
+        buzz.rmStopWord(query0);
         
         /* Send to servlet */
         String buzzWord = buzz.getBuzz(); 
@@ -130,7 +132,9 @@ public class SearchServlet extends HttpServlet {
         /* Store results in MemCache */
         syncCache.put(query, sb.toString()); // populate cache
         
+
         resp.sendRedirect("/search.jsp?buzz=" + buzzWord + "&query=" + query);
+
     } 
       
     /** 

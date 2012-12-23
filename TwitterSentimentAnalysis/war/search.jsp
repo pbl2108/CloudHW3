@@ -110,8 +110,20 @@
 				<%
 		  			String buzzWord = request.getParameter("buzz");
 		    		if (buzzWord != null) {
+		    			
+		    		String query = request.getParameter("query");
+		    		query = request.getParameter("query").replace("%20", " ");
 		  			
 		  			
+<<<<<<< HEAD
+		  			buzz.addStopWord(query);
+		  			buzz.rmStopWord(query);
+		  			
+		  			Query q = pm.newQuery(TwitterBean.class);
+					try {
+		  					List<TwitterBean> listOfTweets = (List<TwitterBean>) q.execute();
+		  					if (!listOfTweets.isEmpty()) {
+=======
 		  					
 							String query = request.getParameter("query");
         
@@ -123,6 +135,7 @@
         					if (value != null) {  
 		  					
 		  						List<TwitterBean> listOfTweets = value.getTweets();
+>>>>>>> 163da7eb35fb8a8e10df09f3675773e262fcfaff
 		  						int count = 0;
 		    					for (TwitterBean t : listOfTweets) {
 		    						count++;
